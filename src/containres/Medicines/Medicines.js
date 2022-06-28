@@ -9,11 +9,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import * as yup from 'yup';
 import { Form, Formik, useFormik } from 'formik';
 import { DataGrid } from '@mui/x-data-grid';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Medicines(props) {
 
     const [open, setOpen] = React.useState(false);
-    const [ data, setData] =useState([]);
+    const [data, setData] = useState([]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -31,28 +33,28 @@ function Medicines(props) {
     });
 
     const handleInsert = (values) => {
-        let localData = localStorage.getItem("medicines");
+        let localData = JSON.parse(localStorage.getItem("medicines"));
 
-        let id = Math.floor (Math.random() * 1000);
+        let id = Math.floor(Math.random() * 1000);
 
-        let data= {
-            id : id,
+        let data = {
+            id: id,
             ...values
         }
-        // console.log(data);
+
 
         if (localData === null) {
-            localStorage.setItem("medicines", JSON.stringify((data)));
+            localStorage.setItem("medicines", JSON.stringify([data]));
         } else {
             localData.push(data);
-            localStorage.setItem("medicines", JSON.stringify(values));
+            localStorage.setItem("medicines", JSON.stringify(localData));
         }
-        console.log(values);
 
         loadData();
         handleClose();
         formikObj.resetForm();
     }
+
     const formikObj = useFormik({
         initialValues: {
             name: '',
@@ -67,27 +69,45 @@ function Medicines(props) {
     })
 
     const columns = [
-        { field: 'name', headerName: 'Name', width: 170 },
-        { field: 'price', headerName: 'Price', width: 170 },
-        { field: 'quantity', headerName: 'Quantity', width: 170 },
-        { field: 'expiry', headerName: 'Expiry', width: 170 },
+        { field: 'name', headerName: 'Name', width: 150 },
+        { field: 'price', headerName: 'Price', width: 150 },
+        { field: 'quantity', headerName: 'Quantity', width: 150 },
+        { field: 'expiry', headerName: 'Expiry', width: 150 },
+        {
+            field: 'action',
+            headerName: 'Action',
+            width: 150,
+            renderCell: (params) => (
+                <IconButton aria-label="delete" onClick={() => handleDelete(params)}>
+                    <DeleteIcon />
+                </IconButton>
+            )
+        },
     ];
-    const localData = () => {
+
+    const loadData = () => {
         let localData = JSON.parse(localStorage.getItem("medicines"));
         setData(localData);
     }
 
-    useEffect (
+    useEffect(
         () => {
             loadData();
         },
-   [])
+        [])
 
     const { handleBlur, handleChange, handleSubmit, errors, touched } = formikObj;
-    let loadData = () => {
-    
+
+    const handleDelete = (params) => {
+        let localData = JSON.parse(localStorage.getItem("medicines"));
+
+        let fdata = localData.filter = ((l) => l.id !== params.id);
+
+        localStorage.setItem("medicines", JSON.stringify(fdata));
+
+        loadData();
     }
- 
+
     return (
         <div>
             <h1>Medicines</h1>
