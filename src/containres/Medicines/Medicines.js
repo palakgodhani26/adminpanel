@@ -11,10 +11,12 @@ import { Form, Formik, useFormik } from 'formik';
 import { DataGrid } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 function Medicines(props) {
 
     const [open, setOpen] = React.useState(false);
+    const [dopen, setDopen] = React.useState(false);
     const [data, setData] = useState([]);
 
     const handleClickOpen = () => {
@@ -23,7 +25,14 @@ function Medicines(props) {
 
     const handleClose = () => {
         setOpen(false);
+        setDopen(false);
     };
+
+    const handleDClickOpen = () => {
+        setOpen(true);
+    };
+
+
 
     let schema = yup.object().shape({
         name: yup.string().required("Please enter name"),
@@ -78,16 +87,24 @@ function Medicines(props) {
             headerName: 'Action',
             width: 150,
             renderCell: (params) => (
-                <IconButton aria-label="delete" onClick={() => handleDelete(params)}>
-                    <DeleteIcon />
-                </IconButton>
+                <>
+                    <IconButton aria-label="delete" onClick={() => handleClickOpen(params)}>
+                        <DeleteIcon />
+                    </IconButton>
+                    <IconButton aria-label="delete" onClick={() => handleDelete(params)}>
+                        <EditIcon />
+                    </IconButton>
+                </>
+
             )
         },
     ];
 
     const loadData = () => {
         let localData = JSON.parse(localStorage.getItem("medicines"));
-        setData(localData);
+        if (localData !== null) {
+            setData(localData);
+        }
     }
 
     useEffect(
@@ -108,11 +125,12 @@ function Medicines(props) {
         loadData();
     }
 
+
     return (
         <div>
             <h1>Medicines</h1>
             <div>
-                <Button variant="outlined" onClick={handleClickOpen}>
+                <Button variant="outlined" onClick={handleDClickOpen}>
                     Add Medicines
                 </Button>
 
@@ -174,7 +192,6 @@ function Medicines(props) {
                                     onBlur={handleBlur}
                                 />
                                 {errors.expiry && touched.expiry ? <p>{errors.expiry}</p> : ''}
-
 
                             </DialogContent>
                             <DialogActions>
