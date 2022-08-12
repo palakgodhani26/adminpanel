@@ -7,6 +7,7 @@ import Patients from './containres/Patients/Patients';
 import Counter from './containres/Counter/Counter';
 import { Provider} from 'react-redux';
 import { configurestore } from './Redux/Store';
+import PromiseExample from './containres/Example/PromiseExample';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path={"/medicines"} exact component={Medicines} />,
         <Route path={"/patients"} exact component={Patients} />,
         <Route path={"/counter"} exact component={Counter} />,
+        <Route path={"/PromiseExample"} exact component={PromiseExample} />,
 
       </Switch>
     </Layout>

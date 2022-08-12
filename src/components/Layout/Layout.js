@@ -105,7 +105,9 @@ export default function Layout({children}) {
   const listItemData= [
     { lable:'Medicines', to:'/medicines', icon:<MedicalServicesIcon />},
     { lable:'Patients', to:'/patients', icon:<PersonIcon />},
-    { lable:'counter' , to:'/counter', icon:<PersonIcon/>}
+    { lable:'counter' , to:'/counter', icon:<PersonIcon/>},
+    { lable:'PromiseExample' , to:'/PromiseExample', icon:<PersonIcon/>}
+
   ]
 
   return (
